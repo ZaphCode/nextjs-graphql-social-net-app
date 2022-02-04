@@ -1,6 +1,6 @@
 import multer from "multer";
 import path from "path";
-import { getRandomString } from "../util/functions";
+import { getRandomString as getRSTR } from "../util/functions";
 
 const upload = multer({
   fileFilter: (req, file, cb) => {
@@ -17,13 +17,16 @@ const upload = multer({
       return cb(null, process.cwd() + "/public/uploads/");
     },
     filename: (req, file, cb) => {
-      const newFileName = `${file.fieldname}-${Date.now()}-${getRandomString(
-        10
-      )}${path.extname(file.originalname)}`;
-
-      (req as any).uploadedFileName = newFileName
-      
-      return cb(null, newFileName);
+      let newFileName
+      if (req.url === '/api/uploads/profile_img') {
+        newFileName = `profile-${Date.now()}-${getRSTR(10)}${path.extname(file.originalname)}`;
+        (req as any).uploadedFileName = newFileName
+        return cb(null, newFileName);
+      } else {
+        newFileName = `post-${Date.now()}-${getRSTR(10)}${path.extname(file.originalname)}`;
+        (req as any).uploadedFileName = newFileName
+        return cb(null, newFileName);
+      }   
     },
   }),
 });

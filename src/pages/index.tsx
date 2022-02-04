@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { SSRProps } from "../util/next_fetch_returns";
-import { IUser } from "../types";
+import { user } from "../types";
 import { getUser } from "../util/functions";
 import Navbar from "../components/Navbar";
 import Image, { ImageLoader } from 'next/image'
@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   
 interface IIndexProps {
-  user: IUser
+  user: user
 }
 
 const Home: NextPage<IIndexProps> = ({user}) => {

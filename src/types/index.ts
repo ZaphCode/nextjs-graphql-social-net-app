@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type IUser = {
+export interface IUser {
   id: string
   username: string
   email: string
@@ -11,16 +11,35 @@ export type IUser = {
   profileImg: string
   createdAt: string
   updatedAt: string
-} | null
+}
+
+export interface IPost {
+  id: string
+  message: string
+  profileImg?:string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface IComment {
+  id: string
+  comment: string
+  userId:string
+  postId: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type user = IUser | null
 
 export interface ICtx {
   req: NextApiRequest;
   res: NextApiResponse;
   verifiedUser: {
-    id: String;
-    email: String;
-    username: String;
-    role: String;
+    id: string;
+    email: string;
+    username: string;
+    role: string;
   } | null;
   prisma: PrismaClient
 }

@@ -6,7 +6,6 @@ import { prisma } from "./prisma_client";
 export default function context(ctx: any): ICtx {
 
   const token = ctx.req.cookies.JWT;
-  console.log('CTX Cookies', ctx.req.cookies)
   if (token) {
     try {
       const decode: any = jwt.verify(token.split(" ")[1], JWT_SECRET);
@@ -16,7 +15,7 @@ export default function context(ctx: any): ICtx {
       return { ...ctx, verifiedUser: null, prisma };
     }
   } else {
-    console.log("no token found");
+    // console.log("no token found");
     return { ...ctx, verifiedUser: null, prisma };
   }
 }

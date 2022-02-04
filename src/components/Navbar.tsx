@@ -1,8 +1,8 @@
 import React from 'react'
-import { IUser } from '../types'
+import { user } from '../types'
 
 interface INavbarProps {
-    user: IUser
+    user: user
 }
 
 const Navbar: React.FC<INavbarProps> = ({user}) => {

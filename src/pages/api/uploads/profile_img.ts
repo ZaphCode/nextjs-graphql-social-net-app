@@ -54,7 +54,8 @@ apiRoute.post(async (req, res) => {
   res
     .status(200)
     .json({
-      data: `Success. Your new profile image is: ${userUpdated.profileImg}`,
+      message: `Success. image Uploaded`,
+      imageName: userUpdated.profileImg
     });
 });
 
