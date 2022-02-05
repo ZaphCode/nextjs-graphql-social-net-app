@@ -1,7 +1,10 @@
+import { Post } from "@prisma/client";
 import { ApolloError } from "apollo-server-micro";
-import { IPost, Resolver } from "../../types";
+import { Resolver } from "../../types";
 
-interface IArgsCP { message: string }
+interface IArgsCP {
+  message: string;
+}
 export const createPost: Resolver<null, IArgsCP> = async (
   _,
   { message },
@@ -17,6 +20,14 @@ export const createPost: Resolver<null, IArgsCP> = async (
   });
   return post;
 };
+
+export const allPosts: Resolver<null, {}> = async (_, __, { prisma }) => {
+  return await prisma.post.findMany({orderBy: {createdAt: 'desc'}});
+};
+
+// export const randomPosts: Resolver<null, {}> = async (_, __, { prisma }) => {
+//   return await prisma.post.findMany();
+// };
 
 export const deletePost: Resolver<null, { id: string }> = async (
   _,
@@ -34,13 +45,16 @@ export const deletePost: Resolver<null, { id: string }> = async (
 
   if (postFound.author.id === verifiedUser.id || verifiedUser.role === "ADMIN")
     return await prisma.post.delete({ where: { id } });
-  else 
-    throw new ApolloError("Unauthorized", "AUTH_ERROR");
+  else throw new ApolloError("Unauthorized", "AUTH_ERROR");
 };
 
 //* PostType Resolvers (Relations)
 
-export const authorRelation: Resolver<IPost, {}> = async (parent, _, { prisma }) => {
+export const authorRelation: Resolver<Post, {}> = async (
+  parent,
+  _,
+  { prisma }
+) => {
   const post = await prisma.post.findUnique({
     where: { id: parent.id },
     include: { author: true },
@@ -48,7 +62,11 @@ export const authorRelation: Resolver<IPost, {}> = async (parent, _, { prisma })
   return post?.author;
 };
 
-export const commentsRelation: Resolver<IPost, {}> = async (parent, _, { prisma }) => {
+export const commentsRelation: Resolver<Post, {}> = async (
+  parent,
+  _,
+  { prisma }
+) => {
   const post = await prisma.post.findUnique({
     where: { id: parent.id },
     include: { comments: true },
@@ -56,4 +74,18 @@ export const commentsRelation: Resolver<IPost, {}> = async (parent, _, { prisma 
   return post?.comments;
 };
 
+export const likesCount: Resolver<Post, {}> = async (parent, _, { prisma }) => {
+  const likes = await prisma.like.findMany({ where: { postId: parent.id } });
+  return likes.length;
+};
 
+export const commentsCount: Resolver<Post, {}> = async (
+  parent,
+  _,
+  { prisma }
+) => {
+  const comments = await prisma.comment.findMany({
+    where: { postId: parent.id },
+  });
+  return comments.length;
+};

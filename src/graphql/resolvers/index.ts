@@ -1,7 +1,26 @@
 import { authUser, login, register, logout } from "./Auth";
-import { users, user, postRelation , postCount } from "./UsersCrud";
-import { createPost, authorRelation, deletePost, commentsRelation} from "./PostCrud";
-import { createComment, userRelation } from "./CommentCrud";
+import {
+  users,
+  user,
+  postsRelation,
+  postCount,
+  followersRelation,
+  followingsRelation,
+  followingsCount,
+  followersCount,
+} from "./UsersCrud";
+import {
+  createPost,
+  authorRelation,
+  deletePost,
+  commentsRelation,
+  likesCount,
+  commentsCount,
+  allPosts
+} from "./PostCrud";
+import { createComment, userRelation, deleteComment } from "./CommentCrud";
+import { follow, unfollow } from "./Follows";
+import { likePost, unlikePost } from "./Likes";
 
 export const resolvers = {
   Query: {
@@ -9,24 +28,37 @@ export const resolvers = {
     authUser,
     users,
     logout,
-    user
+    user,
+    allPosts
   },
   Mutation: {
     login,
     register,
     createPost,
     deletePost,
-    createComment
+    createComment,
+    deleteComment,
+    follow,
+    unfollow,
+    likePost,
+    unlikePost
   },
+  //* Relations
   UserType: {
-    posts: postRelation,
-    postCount
+    posts: postsRelation,
+    postCount,
+    followers: followersRelation,
+    followings: followingsRelation,
+    followingsCount,
+    followersCount,
   },
   PostType: {
     author: authorRelation,
-    comments: commentsRelation
+    comments: commentsRelation,
+    likesCount,
+    commentsCount
   },
   CommentType: {
-    user: userRelation
-  }
+    user: userRelation,
+  },
 };
