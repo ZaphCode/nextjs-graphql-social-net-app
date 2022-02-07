@@ -13,6 +13,7 @@ import {
   createPost,
   authorRelation,
   deletePost,
+  randomPosts,
   commentsRelation,
   likesCount,
   commentsCount,
@@ -29,7 +30,8 @@ export const resolvers = {
     users,
     logout,
     user,
-    allPosts
+    allPosts,
+    randomPosts
   },
   Mutation: {
     login,

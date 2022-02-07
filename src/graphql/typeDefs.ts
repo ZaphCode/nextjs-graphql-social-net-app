@@ -36,8 +36,6 @@ export const typeDefs = gql`
     type CommentType {
         id: ID
         comment: String
-        userId: String
-        postId:   String
         createdAt: String
         updatedAt: String
 
@@ -61,19 +59,20 @@ export const typeDefs = gql`
         authUser: UserType,
         logout: String
         users: [UserType]
-        user (id: String): UserType 
+        user (id: String!): UserType 
         allPosts: [PostType]
+        randomPosts(limit: Int!): [PostType]
     }
     type Mutation {
         login(input: LoginInput): String
         register(input: RegisterInput): String
-        createPost(message: String): PostType
-        deletePost(id: String): PostType
-        createComment(postId: String, comment: String): CommentType
-        deleteComment(id: String): CommentType
-        follow (userToFollowId: String): String
-        unfollow (userToUnfollowId: String): String
-        likePost(id: String): String
-        unlikePost(id: String): String
+        createPost(message: String!): PostType
+        deletePost(id: String!): PostType
+        createComment(postId: String!, comment: String!): CommentType
+        deleteComment(id: String!): CommentType
+        follow (userToFollowId: String!): String
+        unfollow (userToUnfollowId: String!): String
+        likePost(id: String!): String
+        unlikePost(id: String!): String
     }
 `

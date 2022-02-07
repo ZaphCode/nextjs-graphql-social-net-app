@@ -1,36 +1,46 @@
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export interface IUser {
+export interface UserGql {
   id: string
   username: string
   email: string
-  verified: boolean
   role: 'USER' | 'MODERATOR' | 'ADMIN'
-  active: boolean
   profileImg: string
+  active: boolean
+  verified: boolean
   createdAt: string
   updatedAt: string
+  postCount: number
+  followersCount: number
+  followingsCount: number
+  posts: PostGql[]
+  followers: UserGql[]
+  followings: UserGql[] 
 }
 
-export interface IPost {
+export interface PostGql {
   id: string
   message: string
   profileImg?:string
   createdAt: string
   updatedAt: string
+  author: UserGql
+  comments: CommentGql[]
+  commentsCount: number
+  likesCount: number
 }
 
-export interface IComment {
+export interface CommentGql {
   id: string
   comment: string
-  userId:string
-  postId: string
   createdAt: string
   updatedAt: string
+  user: UserGql
+  post: PostGql
 }
 
-export type user = IUser | null
+export type authUser = UserGql | null
 
 export interface ICtx {
   req: NextApiRequest;
@@ -39,7 +49,7 @@ export interface ICtx {
     id: string;
     email: string;
     username: string;
-    role: string;
+    role: 'USER' | 'MODERATOR' | 'ADMIN';
   } | null;
   prisma: PrismaClient
 }

@@ -25,9 +25,19 @@ export const allPosts: Resolver<null, {}> = async (_, __, { prisma }) => {
   return await prisma.post.findMany({orderBy: {createdAt: 'desc'}});
 };
 
-// export const randomPosts: Resolver<null, {}> = async (_, __, { prisma }) => {
-//   return await prisma.post.findMany();
-// };
+//* 12 - 11  = 1 
+
+export const randomPosts: Resolver<null, {limit: number}> = async (_, {limit}, { prisma }) => {
+  const postCount = await prisma.post.count();
+  const skip = Math.floor(Math.random() * postCount);
+  return await prisma.post.findMany({
+      take: limit,
+      skip: (postCount - skip < limit ? skip - limit : skip),
+      orderBy: {
+          createdAt: 'desc'
+      },
+  });
+};
 
 export const deletePost: Resolver<null, { id: string }> = async (
   _,
